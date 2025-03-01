@@ -2,6 +2,16 @@ import { request, gql } from "graphql-request";
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 
+// Add URL validation
+if (!graphqlAPI) {
+  throw new Error('NEXT_PUBLIC_GRAPHCMS_ENDPOINT is not defined');
+}
+
+// Ensure the URL is absolute
+if (!graphqlAPI.startsWith('http://') && !graphqlAPI.startsWith('https://')) {
+  throw new Error('NEXT_PUBLIC_GRAPHCMS_ENDPOINT must be an absolute URL starting with http:// or https://');
+}
+
 export const getPosts = async () => {
   const query = gql`
     query MyQuery {
