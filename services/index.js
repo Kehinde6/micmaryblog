@@ -20,7 +20,7 @@ if (!graphqlAPI.startsWith('http://') && !graphqlAPI.startsWith('https://')) {
 export const getPosts = async () => {
   const query = gql`
     query MyQuery {
-      postsConnection {
+      postsConnection(orderBy: createdAt_DESC) {
         edges {
           cursor
           node {
@@ -49,9 +49,14 @@ export const getPosts = async () => {
     }
   `;
 
-  const result = await request(graphqlAPI, query);
-
-  return result.postsConnection.edges;
+  try {
+    const result = await request(graphqlAPI, query);
+    console.log('Posts Result:', result); // Add debugging
+    return result.postsConnection.edges;
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return [];
+  }
 };
 
 export const getCategories = async () => {
@@ -274,19 +279,32 @@ export const getRecentPosts = async () => {
   const query = gql`
     query GetPostDetails {
       posts(
-        orderBy: createdAt_ASC
-        last: 3
+        orderBy: createdAt_DESC
+        first: 3
       ) {
         title
+        excerpt
         featuredImage {
           url
+        }
+        author {
+          name
+          photo {
+            url
+          }
         }
         createdAt
         slug
       }
     }
   `;
-  const result = await request(graphqlAPI, query);
 
-  return result.posts;
+  try {
+    const result = await request(graphqlAPI, query);
+    console.log('Recent Posts Result:', result); // Add this for debugging
+    return result.posts;
+  } catch (error) {
+    console.error('Error fetching recent posts:', error);
+    return [];
+  }
 };

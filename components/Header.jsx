@@ -4,7 +4,7 @@ import React from "react";
 import logo from "../public/logo.jpeg";
 import { GiSpiderWeb } from "react-icons/gi";
 function handleRedirect() {
-  window.location.href = "https://www.micmary school.com";
+  window.location.href = "https://www.micmaryschool.com";
 }
 
 function Header() {
